@@ -1,79 +1,3 @@
-var positive_arr = [];
-var negative_arr = [];
-
-function appendOperator(string, operator) {
-
-    for (let i = 0; i < string.length; i++) {
-
-        if(string[i] == operator){
-
-            i++;
-            element = '';
-
-            while(string[i] != '+' && string[i] != '-' && i < string.length){
-                
-                element += string[i];
-                i++;
-            }
-
-            if(operator == '+'){
-
-                positive_arr.push(element);
-            }
-
-            else {
-
-                negative_arr.push(element);
-            }
-        }
-    }
-
-    if(operator == '+'){
-
-        if(string[0] != '-'){
-
-            let i = 0;
-            element = '';
-    
-            if(string[0] == '+'){
-    
-                i++;
-            }
-    
-            while(string[i] != '+' && string[i] != '-'){
-                    
-                element += string[i];
-                i++;
-            }
-    
-            positive_arr.push(element);
-        }
-    }
-
-}
-
-function divideString(string, char){
-
-    for (let i = 0; i < string.length; i++) {
-
-        if(string[i] == char)
-
-            return [string.slice(0, i), string.slice(i+1, string.length)];
-      }
-}
-
-function firstOperator(string){
-
-    for (let i = 0; i < string.length; i++) {
-
-        if(string[i] == 'x' || string[i] == '/' || string[i] == '%'){
-
-            return string[i];
-        }
-
-        return null;
-    }
-}
 
 function operate(a, b, operator){
 
@@ -86,73 +10,79 @@ function operate(a, b, operator){
             return a - b;
 
         case 'x':
-            return a * b;
+            return Math.round(a * b * 100) / 100;
 
         case '/':
-            return a / b;
+            return Math.round(a / b * 100) / 100;
 
         case '%':
-            return a % b;
+            return Math.round(a % b * 100) / 100;
     }
 }
 
-function calculate(string) {
+function calculateFinalSum(string) {
 
-    if(string == Number(string)){
+    var i = 0;
+    var value = '';
+    var sum = 0;
 
-        return Number(string);
+    if(string[0] != '-' && string[0] != '+') {
+
+        string = '+' + string;
     }
 
-    let i=0;
+    while(i < string.length) {
 
-    var left_value ;
-    var left_value_str = '';
+        value = '';
+        var start_index = i + 1;
+        var operator = string[i++];
 
-    var right_value;
-    var right_value_str = '';
+        while(string[i] != '-' && string[i] != '+' && i < string.length) {
 
-    var operator = '';
-
-    var finished = false;
-
-    while(string[i] != 'x' && string[i] != '/' &&
-         string[i] != '%' && string[i] < string.length) {
-
-            left_value_str += string[i];
             i++;
         }
 
-    left_value = Number(left_value_str);
+        value = string.slice(start_index, i);
+        
+        sum = operate(sum, Number(value), operator);
+    }
+    return sum;
+}
 
+function calculateOperation(string) {
 
-    operator = string[i];
-    i++;
+    let i = string.length - 1;
+    let j = i -1;
 
-    while(!finished){
+    while(string[j] != 'x' && string[j] != '/' && string[j] != '%' && j >= 0) {
 
-        while(string[i] != 'x' && string[i] != '/' &&
-         string[i] != '%' && string[i] < string.length) {
-
-            right_value_str += string[i];
-            i++;
-        }
-
-        right_value = Number(right_value_str);
-
-        left_value = operate(left_value_str, right_value, operator);
-
-        if(i == string.length){
-
-            finished = true;
-        }
-
-        else {
-
-            operator = string[i];
-        }
-
-        i++;
+        j--;
     }
 
-    return left_value;
+    if(j == -1) {
+
+        return string;
+    }
+
+    var right_value = string.slice(j+1, i);
+
+    var operation = string[j];
+    var operation_index = j;
+
+    j--;
+
+    while(string[j] !='-' && string[j] != '+' && j >= 0) {
+
+        j--;
+    }
+
+    j++;
+
+    var left_value = string.slice(j, operation_index);
+
+    result = operate(Number(left_value), Number(right_value), operation);
+
+    var final_sum = string.slice(0, j) + result + string[i];
+
+    return final_sum;
 }

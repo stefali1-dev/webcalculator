@@ -6,7 +6,7 @@
     max-width: 500px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
     margin-left: auto;
     margin-right: auto;
     margin-top: 200px;
@@ -47,9 +47,22 @@ button:active {
     min-height: 80px;
     
 }
+
 p {
     margin: 0px 0px 0px 0px;
     width: auto;
     height: fit-content;
     word-wrap : break-word;
+}
+
+#clearbtn {
+    height: auto !important;
+    grid-row: 2/4;
+    grid-column: 5/6;
+}
+
+#equalbtn {
+    height: auto !important;
+    grid-row: 4/6;
+    grid-column: 5/6;
 }
