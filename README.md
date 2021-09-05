@@ -1,3 +1,0 @@
-# webcalculator
-
-Basic web calculator.
